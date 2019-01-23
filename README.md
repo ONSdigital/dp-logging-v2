@@ -2,52 +2,46 @@
 
 ## Examples
 
+Initialize the logger:
 ```java
-public class API {
+    // Create a new Logback logger instance
+    Logger logger = LoggerFactory.getLogger("com.github.onsdigital.logging.v2.example");
 
-    public static void main(String[] args) {
-        // Create a new Logback logger instance
-        Logger logger = LoggerFactory.getLogger("com.github.onsdigital.logging.v2.example");
+    // Initialize the log lib passing in the logger and the EventSerializer impl you wish to use.
+    LoggerConfig.init(logger, new JacksonEventSerializer(true));
+```
 
-        // Initialize the log lib passing in the logger and the EventSerializer impl you wish to use.
-        LoggerConfig.init(logger, new JacksonEventSerializer(true));
+Logging an event using the out of the box `SimpleEvent` logger
+```
+    new SimpleEvent("hello.world")
+            .httpMethod("GET")
+            .httpPath("/hello")
+            .log("request received");
+```
 
-        // Create a simple Spark API route
-        get("/hello", (req, res) -> {
+Outputs:
+```
+{
+  "created" : 1548236505866,
+  "namespace" : "hello.world",
+  "http" : {
+    "path" : "/hello",
+    "method" : "GET"
+  },
+  "event" : "request received"
+}
+```
 
-            // Simple event is a ready to use log event with the mandatory fields
-            new SimpleEvent("hello.world")
-                    .httpMethod("GET")
-                    .httpPath("/hello")
-                    .log("request received");
-
-            return "Hello World!";
-        });
-
-        // Create a slightly more complex Spark API route
-        get("/hello/:name/:collectionID", (req, res) -> {
-
-            // ComplexEvent is an example of how to extend the BaseEvent to add additional fields to your log messages.
-            new ComplexEvent("hello.world")
-                    .httpMethod("GET")
-                    .httpPath("/hello")
-                    .user(req.params(":name"))
-                    .collectionID(req.params(":collectionID"))
-                    .log("request received");
-
-            return "Hello " + req.params(":name");
-        });
-    }
-
-    // Extend the BaseEvent class
-    static class ComplexEvent extends BaseEvent<ComplexEvent> {
+Extending `BaseEvent` to add custom fields & objects to the log event:
+```java
+ class ComplexEvent extends BaseEvent<ComplexEvent> {
 
         // specify a namespace
         public ComplexEvent(String namespace) {
             super(namespace);
         }
 
-        // give the nested of a namespace so it will not clash with other apps.
+        // give the nested object a namespace so it will not clash with other apps.
         @JsonProperty("hello.world.data")
         private Map<String, Object> data = new HashMap<>();
 
@@ -63,5 +57,29 @@ public class API {
             return this;
         }
     }
+```
+Logging an event using the customised event type:
+```java
+    new ComplexEvent("hello.world")
+            .httpMethod("GET")
+            .httpPath("/hello")
+            .user(req.params(":name"))
+            .collectionID(req.params(":collectionID"))
+            .log("request received");
+```
+Outputs:
+```json
+{
+  "created" : 1548236618285,
+  "namespace" : "hello.world",
+  "http" : {
+    "path" : "/hello",
+    "method" : "GET"
+  },
+  "event" : "request received",
+  "hello.world.data" : {
+    "name" : "dave",
+    "collectionID" : "666"
+  }
 }
 ```
