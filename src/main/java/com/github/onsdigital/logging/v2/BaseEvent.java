@@ -7,24 +7,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Event<T extends Event> {
+import static com.github.onsdigital.logging.v2.LoggerConfig.getEventSerializer;
+import static com.github.onsdigital.logging.v2.LoggerConfig.getLogger;
+
+public abstract class BaseEvent<T extends BaseEvent> {
 
     static final String TRACE_ID = "trace_id";
     static final String SPAN_ID = "span_id";
     static final String HTTP_METHOD = "method";
     static final String HTTP_PATH = "path";
 
-    private String event;
+    protected String event;
     private Date created;
     private String namespace;
-    private String traceID;
-    private String spanID;
+    protected String traceID;
+    protected String spanID;
     private Map<String, Object> http;
 
-    /**
-     * Construct a new Logger and init the base field values.
-     */
-    protected Event(String namespace) {
+    protected BaseEvent(String namespace) {
         this.namespace = namespace;
         this.created = new Date();
         this.http = new HashMap<>();
@@ -65,8 +65,6 @@ public abstract class Event<T extends Event> {
             this.spanID = MDC.get(SPAN_ID);
         }
 
-        getLogWriter().log(this);
+        getLogger().info(getEventSerializer().toJson(this));
     }
-
-    protected abstract LogWriter getLogWriter();
 }
