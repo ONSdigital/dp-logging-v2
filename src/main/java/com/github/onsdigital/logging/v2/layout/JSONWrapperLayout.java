@@ -2,7 +2,7 @@ package com.github.onsdigital.logging.v2.layout;
 
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.github.onsdigital.logging.v2.BaseEvent;
+import com.github.onsdigital.logging.v2.event.BaseEvent;
 
 import static com.github.onsdigital.logging.v2.LoggerConfig.getEventSerializer;
 

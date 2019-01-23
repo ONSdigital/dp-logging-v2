@@ -1,4 +1,4 @@
-package com.github.onsdigital.logging.v2;
+package com.github.onsdigital.logging.v2.event;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
@@ -17,12 +17,12 @@ public abstract class BaseEvent<T extends BaseEvent> {
     static final String HTTP_METHOD = "method";
     static final String HTTP_PATH = "path";
 
-    protected String event;
     private Date created;
     private String namespace;
+    private Map<String, Object> http;
     protected String traceID;
     protected String spanID;
-    private Map<String, Object> http;
+    protected String event;
 
     protected BaseEvent(String namespace) {
         this.namespace = namespace;

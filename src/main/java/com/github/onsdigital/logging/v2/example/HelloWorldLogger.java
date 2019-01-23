@@ -1,7 +1,7 @@
 package com.github.onsdigital.logging.v2.example;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.onsdigital.logging.v2.BaseEvent;
+import com.github.onsdigital.logging.v2.event.BaseEvent;
 
 import java.util.HashMap;
 import java.util.Map;

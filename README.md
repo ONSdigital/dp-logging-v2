@@ -1,18 +1,8 @@
-package com.github.onsdigital.logging.v2.example;
+# dp-logging-v2
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.onsdigital.logging.v2.LoggerConfig;
-import com.github.onsdigital.logging.v2.event.BaseEvent;
-import com.github.onsdigital.logging.v2.event.SimpleEvent;
-import com.github.onsdigital.logging.v2.serialiser.JacksonEventSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+## Examples
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static spark.Spark.get;
-
+```java
 public class API {
 
     public static void main(String[] args) {
@@ -74,3 +64,4 @@ public class API {
         }
     }
 }
+```
